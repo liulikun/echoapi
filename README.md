@@ -1,4 +1,4 @@
-##Echo server for API testing.
+##Echo server for API testing. (http://echoapi.herokuapp.com/)
 
 GET /{status_code}/{response_string}
 
