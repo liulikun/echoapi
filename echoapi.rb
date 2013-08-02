@@ -11,7 +11,12 @@ get '*' do
     if (300..399).include? status
       [status, {'Location' => $2.sub(':/', '://')}, ['']]
     else
-      [status, {}, [$2]]
+      if (params[:callback])
+        result = "#{params[:callback]}('#{$2}')"
+      else
+        result = $2
+      end
+      [status, {}, [result]]
     end
   else
     request.path
@@ -31,7 +36,7 @@ delete '*' do
 end
 
 def get_response
-  [get_status, {}, [request.params.to_json]]
+  [get_status, {}, [request.env["rack.input"].read]]
 end
 
 def get_status
