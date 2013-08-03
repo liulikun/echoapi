@@ -12,7 +12,7 @@ get '*' do
       [status, {'Location' => $2.sub(':/', '://')}, ['']]
     else
       if (params[:callback])
-        [status, {'Content-Type' => 'text/javascript'}, ["#{params[:callback]}('#{$2}')"]]
+        [status, {'Content-Type' => 'text/javascript'}, ["#{params[:callback]}('{\"text\":\"#{$2}\"}')"]]
       else
         [status, {}, ["#{$2}"]]
       end
