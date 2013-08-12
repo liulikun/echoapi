@@ -18,7 +18,11 @@ get '*' do
       if (params[:callback])
         [status, {'Content-Type' => 'text/javascript'}, ["#{params[:callback]}('{\"text\":\"#{$2}\"}')"]]
       else
-        [status, {}, ["#{$2}"]]
+        headers = {}
+        request.env.select{|h| h =~ /^HTTP_.*/}.each do |k, v|
+          headers[k] = v
+        end
+        [status, {'Content-Type' => 'application/json'}, [{:headers => headers, :params => params}.to_json]]
       end
     end
   else
