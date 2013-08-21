@@ -40,7 +40,7 @@ delete '*' do
 end
 
 def get_response
-  [get_status, {}, [request.env["rack.input"].read]]
+  [get_status, {'Content-Type' => request.content_type}, [request.env["rack.input"].read]]
 end
 
 def get_status
