@@ -7,9 +7,6 @@ require 'json'
 
 get '*' do
 
-  require 'pp'
-  pp request.env.select{|h| h =~ /^HTTP_.*/}
-
   if request.path =~ /\/(\d\d\d)\/(.+)/
     status = $1.to_i
     if (300..399).include? status
@@ -26,7 +23,7 @@ get '*' do
       end
     end
   else
-    request.path
+    [200, {'Content-Type' => 'application/json'}, [{:path => request.path, :params => params}.to_json]]
   end
 end
 

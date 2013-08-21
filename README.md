@@ -3,6 +3,8 @@
 GET /{status_code}/{response_string}
 
 * /200/abc
+* /200/abc?x=1
+* /200/abc?callback=xyz    (JSONP support)
 * /302/http://www.example.com
 * /400/bad
 * /500/error
