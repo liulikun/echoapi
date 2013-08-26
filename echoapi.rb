@@ -4,6 +4,8 @@ require 'json'
 #use Rack::Auth::Basic, "Restricted Area" do |username, password|
 #  username == 'admin' and password == 'admin'
 #end
+set :port, 9494
+set :protection, :except => [:remote_referrer, :json_csrf]
 
 get '*' do
 
