@@ -17,11 +17,7 @@ get '*' do
       if (params[:callback])
         [status, {'Content-Type' => 'text/javascript'}, ["#{params[:callback]}('{\"text\":\"#{$2}\"}')"]]
       else
-        headers = {}
-        request.env.select{|h| h =~ /^HTTP_.*/}.each do |k, v|
-          headers[k] = v
-        end
-        [status, {'Content-Type' => 'application/json'}, [{:headers => headers, :params => params}.to_json]]
+        [status, {'Content-Type' => 'application/json'}, [{:headers => get_request_headers, :params => params}.to_json]]
       end
     end
   else
@@ -42,7 +38,15 @@ delete '*' do
 end
 
 def get_response
-  [get_status, {'Content-Type' => request.content_type}, [request.env["rack.input"].read]]
+  data = request.env["rack.input"].read
+  content_type = request.content_type
+
+  if content_type == 'application/json'
+    response = JSON.dump({:headers => get_request_headers, :data => data})
+  else
+    response = data
+  end
+  [get_status, {'Content-Type' => request.content_type}, [response]]
 end
 
 def get_status
@@ -51,4 +55,12 @@ def get_status
   else
     200
   end
+end
+
+def get_request_headers
+  headers = {}
+  request.env.select{|h| h =~ /^HTTP_.*/}.each do |k, v|
+    headers[k] = v
+  end
+  headers
 end
