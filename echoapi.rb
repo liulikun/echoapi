@@ -9,6 +9,8 @@ set :protection, :except => [:remote_referrer, :json_csrf]
 
 get '*' do
   check_sleep
+  params.delete('splat')
+  params.delete('captures')
 
   if request.path =~ /\/(\d\d\d)\/(.+)/
     status = $1.to_i
