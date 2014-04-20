@@ -8,6 +8,7 @@ set :port, 9494
 set :protection, :except => [:remote_referrer, :json_csrf]
 
 get '*' do
+  check_sleep
 
   if request.path =~ /\/(\d\d\d)\/(.+)/
     status = $1.to_i
@@ -26,14 +27,17 @@ get '*' do
 end
 
 post '*' do
+  check_sleep
   get_response
 end
 
 put '*' do
+  check_sleep
   get_response
 end
 
 delete '*' do
+  check_sleep
   get_response
 end
 
@@ -63,4 +67,10 @@ def get_request_headers
     headers[k] = v
   end
   headers
+end
+
+def check_sleep
+  if params[:sleep]
+    sleep params[:sleep].to_i
+  end
 end
