@@ -48,7 +48,7 @@ def get_response
   content_type = request.content_type
 
   if content_type == 'application/json'
-    response = JSON.dump({:headers => get_request_headers, :data => data})
+    response = JSON.dump({:headers => get_request_headers, :data => JSON.parse(data)})
   else
     response = data
   end
